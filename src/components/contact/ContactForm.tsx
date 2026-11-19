@@ -4,7 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Check, CircleX, LoaderCircle } from "lucide-react";
 import { contactSchema } from "@/lib/contact-schema";
-import { propertyTypeOptions, serviceOptions } from "@/lib/site";
+import {
+  investmentStageOptions,
+  serviceOptions,
+  siteConfig,
+  timelineOptions,
+} from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -15,8 +20,11 @@ interface FormState {
   companyName: string;
   jobTitle: string;
   service: string;
-  propertyType: string;
+  investmentStage: string;
+  units: string;
+  market: string;
   requirements: string;
+  timeline: string;
   consent: boolean;
   companyWebsite: string;
 }
@@ -27,8 +35,11 @@ const initialState: FormState = {
   companyName: "",
   jobTitle: "",
   service: "",
-  propertyType: "",
+  investmentStage: "",
+  units: "",
+  market: "",
   requirements: "",
+  timeline: "",
   consent: false,
   companyWebsite: "",
 };
@@ -39,8 +50,11 @@ const fieldOrder = [
   "companyName",
   "jobTitle",
   "service",
-  "propertyType",
+  "investmentStage",
+  "units",
+  "market",
   "requirements",
+  "timeline",
   "consent",
 ] as const;
 
@@ -69,8 +83,11 @@ export function ContactForm() {
       companyName: values.companyName,
       jobTitle: values.jobTitle,
       service: values.service,
-      propertyType: values.propertyType,
+      investmentStage: values.investmentStage,
+      units: values.units,
+      market: values.market,
       requirements: values.requirements,
+      timeline: values.timeline,
       consent: values.consent,
       companyWebsite: values.companyWebsite,
       startedAt: startedAt.current,
@@ -144,17 +161,25 @@ export function ContactForm() {
       });
 
       const data = (await response.json().catch(() => null)) as
-        | { ok?: boolean; message?: string; reference?: string; fields?: Record<string, string> }
+        | {
+            ok?: boolean;
+            message?: string;
+            reference?: string;
+            delivered?: boolean;
+            fields?: Record<string, string>;
+          }
         | null;
 
-      if (!response.ok || !data?.ok) {
+      if (!response.ok || !data?.ok || data.delivered !== true) {
         if (data?.fields) {
           setErrors(data.fields as Partial<Record<FieldName, string>>);
         }
         setStatus("error");
         setServerMessage(
           data?.message ??
-            "We could not submit your enquiry. Please try again, or email us directly.",
+            (siteConfig.contactEmailConfigured
+              ? "We could not submit your enquiry. Please try again, or email us directly."
+              : "We could not submit your enquiry. Please try again shortly."),
         );
         return;
       }
@@ -181,8 +206,8 @@ export function ContactForm() {
         </span>
         <h2 className="heading-card mt-6">Enquiry received</h2>
         <p className="mt-3 text-[0.875rem] leading-[1.75] text-slate">
-          Thank you — your enquiry has been submitted. We will review the details
-          and respond with suggested next steps.
+          Thank you — your enquiry has been submitted successfully. We will review
+          the details and respond with suggested next steps.
         </p>
         {reference ? (
           <p className="mt-4 border border-line bg-ice/40 px-4 py-3 text-[0.75rem] text-slate">
@@ -218,7 +243,7 @@ export function ContactForm() {
       onSubmit={handleSubmit}
       noValidate
       className="border border-line bg-white p-6 md:p-8"
-      aria-label="Consultation enquiry form"
+      aria-label="Multifamily enquiry form"
     >
       <div className="border-b border-line pb-5">
         <h2 className="heading-card">Tell us about your requirements</h2>
@@ -345,25 +370,30 @@ export function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="propertyType" className="field-label">
-            Property type <span aria-hidden="true">*</span>
+          <label htmlFor="investmentStage" className="field-label">
+            Investment stage <span aria-hidden="true">*</span>
           </label>
           <div className="relative">
             <select
-              id="propertyType"
-              name="propertyType"
+              id="investmentStage"
+              name="investmentStage"
               required
-              value={values.propertyType}
-              onChange={(event) => updateValue("propertyType", event.target.value)}
-              onBlur={() => handleBlur("propertyType")}
-              aria-invalid={Boolean(errors.propertyType)}
-              aria-describedby={describedBy("propertyType")}
-              className={cn("field pr-10", !values.propertyType && "text-slate/60")}
+              value={values.investmentStage}
+              onChange={(event) =>
+                updateValue("investmentStage", event.target.value)
+              }
+              onBlur={() => handleBlur("investmentStage")}
+              aria-invalid={Boolean(errors.investmentStage)}
+              aria-describedby={describedBy("investmentStage")}
+              className={cn(
+                "field pr-10",
+                !values.investmentStage && "text-slate/60",
+              )}
             >
               <option value="" disabled>
-                Select a property type
+                Select an investment stage
               </option>
-              {propertyTypeOptions.map((option) => (
+              {investmentStageOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
@@ -371,7 +401,52 @@ export function ContactForm() {
             </select>
             <SelectChevron />
           </div>
-          <FieldError name="propertyType" message={errors.propertyType} />
+          <FieldError name="investmentStage" message={errors.investmentStage} />
+        </div>
+
+        <div>
+          <label htmlFor="units" className="field-label">
+            Number of units{" "}
+            <span className="font-normal normal-case tracking-normal text-slate/60">
+              (optional)
+            </span>
+          </label>
+          <input
+            id="units"
+            name="units"
+            type="text"
+            inputMode="numeric"
+            value={values.units}
+            onChange={(event) => updateValue("units", event.target.value)}
+            onBlur={() => handleBlur("units")}
+            aria-invalid={Boolean(errors.units)}
+            aria-describedby={describedBy("units")}
+            className="field"
+            placeholder="e.g. 180"
+          />
+          <FieldError name="units" message={errors.units} />
+        </div>
+
+        <div>
+          <label htmlFor="market" className="field-label">
+            Property location / market{" "}
+            <span className="font-normal normal-case tracking-normal text-slate/60">
+              (optional)
+            </span>
+          </label>
+          <input
+            id="market"
+            name="market"
+            type="text"
+            value={values.market}
+            onChange={(event) => updateValue("market", event.target.value)}
+            onBlur={() => handleBlur("market")}
+            aria-invalid={Boolean(errors.market)}
+            aria-describedby={describedBy("market")}
+            className="field"
+            placeholder="City, state or submarket"
+          />
+          <FieldError name="market" message={errors.market} />
         </div>
 
         <div className="sm:col-span-2">
@@ -389,7 +464,7 @@ export function ContactForm() {
             aria-invalid={Boolean(errors.requirements)}
             aria-describedby={describedBy("requirements")}
             className="field resize-y"
-            placeholder="Asset type, market, transaction stage, decision required and any deadline."
+            placeholder="Asset strategy, market, transaction stage, decision required and any deadline."
           />
           <div className="mt-1.5 flex items-start justify-between gap-4">
             <FieldError name="requirements" message={errors.requirements} />
@@ -397,6 +472,36 @@ export function ContactForm() {
               {values.requirements.length}/3000
             </span>
           </div>
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="timeline" className="field-label">
+            Expected timeline <span aria-hidden="true">*</span>
+          </label>
+          <div className="relative">
+            <select
+              id="timeline"
+              name="timeline"
+              required
+              value={values.timeline}
+              onChange={(event) => updateValue("timeline", event.target.value)}
+              onBlur={() => handleBlur("timeline")}
+              aria-invalid={Boolean(errors.timeline)}
+              aria-describedby={describedBy("timeline")}
+              className={cn("field pr-10", !values.timeline && "text-slate/60")}
+            >
+              <option value="" disabled>
+                Select an expected timeline
+              </option>
+              {timelineOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <SelectChevron />
+          </div>
+          <FieldError name="timeline" message={errors.timeline} />
         </div>
       </div>
 
@@ -453,8 +558,9 @@ export function ContactForm() {
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-xs text-[0.625rem] leading-relaxed text-slate/65">
-          Your details are used only to respond to this enquiry. Submissions are
-          rate-limited and checked for automated abuse.
+          Your details are used only to respond to this enquiry and are handled
+          confidentially. Submissions are rate-limited and checked for automated
+          abuse.
         </p>
         <button
           type="submit"
@@ -471,7 +577,7 @@ export function ContactForm() {
               Submitting
             </>
           ) : (
-            "Submit Inquiry"
+            "Submit Enquiry"
           )}
         </button>
       </div>

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import {
+  Building2,
   ChartNoAxesCombined,
   Check,
-  Compass,
   FileSpreadsheet,
   Layers,
   Scale,
@@ -18,44 +18,45 @@ import { founder } from "@/lib/founder";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
-  title: "About — Independent Real Estate Analytics Expertise",
+  title: "About DatumCRE — Independent Multifamily Analytics",
   description:
-    "DatumCRE Analytics is an independent commercial real estate analytics practice providing financial modelling, underwriting, portfolio analytics and valuation support to US real estate professionals.",
+    "DatumCRE Analytics is an independent Multifamily real estate analytics practice founded by Puneet Tripathi, providing financial modelling, underwriting, valuation support and portfolio analytics to US real estate professionals.",
   path: "/about",
-  image: "/images/about-architecture.jpg",
-  imageAlt: "Modern commercial building façade used as an editorial image for DatumCRE Analytics",
+  image: "/images/industry-multifamily.jpg",
+  imageAlt:
+    "US multifamily apartment community with brick façades and landscaped grounds",
 });
 
 const disciplines = [
   {
+    icon: Building2,
+    title: "Multifamily acquisition underwriting",
+    body: "Rent roll and T-12 analysis, normalised NOI, pricing and return analysis for apartment acquisitions.",
+  },
+  {
     icon: ChartNoAxesCombined,
-    title: "Real estate financial modelling",
-    body: "Acquisition, development and hold models built from first principles with documented assumptions and traceable outputs.",
+    title: "Development & investment modelling",
+    body: "Development budgets, sources and uses, construction cash flow, lease-up and JV waterfall modelling.",
+  },
+  {
+    icon: FileSpreadsheet,
+    title: "Rent roll & T-12 analysis",
+    body: "Unit-level revenue reconstruction, loss to lease, concessions and operating expense normalisation.",
   },
   {
     icon: Target,
-    title: "Acquisition & development underwriting",
-    body: "Pricing, return and feasibility analysis that expresses the business plan as a set of specific, testable assumptions.",
+    title: "Valuation & DCF support",
+    body: "Direct capitalisation, discounted cash flow and sensitivity analysis to support internal marks and pricing.",
   },
   {
     icon: Layers,
     title: "Portfolio analytics",
-    body: "Consistent performance measurement, variance analysis and capital allocation views across multiple assets and strategies.",
-  },
-  {
-    icon: FileSpreadsheet,
-    title: "Financial statement analysis",
-    body: "Normalised operating statements, NOI reconstruction and reconciliation of reported results to underwriting assumptions.",
+    body: "Consistent performance measurement, variance analysis and capital tracking across apartment portfolios.",
   },
   {
     icon: Scale,
-    title: "Valuation support",
-    body: "DCF, direct capitalisation and comparable analysis used to support internal marks, pricing and third-party review.",
-  },
-  {
-    icon: Compass,
-    title: "Institutional-quality reporting",
-    body: "Investment committee and management materials structured for decision-making, with supporting schedules and clear sourcing.",
+    title: "Debt & financing analysis",
+    body: "DSCR, debt yield, LTV and loan sizing analysis across base and stressed operating scenarios.",
   },
 ];
 
@@ -78,17 +79,64 @@ const principles = [
   },
 ];
 
+function FounderPortrait() {
+  if (founder.imageEnabled) {
+    return (
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-navy">
+        <Image
+          src={founder.image}
+          alt={founder.imageAlt}
+          fill
+          sizes="(max-width: 1024px) 100vw, 40vw"
+          className="img-tone object-cover"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex aspect-[4/5] w-full flex-col justify-between overflow-hidden bg-navy p-8 text-white">
+      <div aria-hidden="true" className="absolute inset-0 grid-blueprint opacity-70" />
+      <div
+        aria-hidden="true"
+        className="absolute -right-20 -top-20 size-64 rounded-full border border-white/10"
+      />
+      <div className="relative">
+        <span className="text-[0.5625rem] font-semibold uppercase tracking-[0.2em] text-mist">
+          DatumCRE Analytics
+        </span>
+      </div>
+      <div className="relative">
+        <span className="font-heading text-[5.5rem] font-semibold leading-none tracking-[-0.06em] text-white/90">
+          PT
+        </span>
+        <p className="mt-6 font-heading text-[1.25rem] font-semibold text-white">
+          {founder.name}
+        </p>
+        <p className="mt-1 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-mist">
+          {founder.role}
+        </p>
+      </div>
+      <div className="relative border-t border-white/15 pt-4">
+        <p className="text-[0.6875rem] leading-relaxed text-white/60">
+          Independent Multifamily real estate analytics · {siteConfig.region}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function AboutPage() {
   return (
     <>
       <PageHero
         eyebrow="About DatumCRE"
-        title="Independent Expertise. Data-Driven Perspective."
-        description="An independent commercial real estate analytics practice built to give investment, asset management and finance teams reliable analytical capacity."
+        title="Independent Multifamily Analytics. Institutional Discipline."
+        description="An independent Multifamily analytics practice built to give investment, asset management and finance teams reliable, transparent analytical capacity."
         crumbs={[{ label: "About" }]}
       />
 
-      {/* Mission + image */}
+      {/* Mission */}
       <section className="section bg-white">
         <div className="container-page">
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-14">
@@ -96,33 +144,33 @@ export default function AboutPage() {
               <span className="eyebrow">Mission</span>
               <blockquote className="mt-6 border-l-2 border-blue pl-6">
                 <p className="font-heading text-[clamp(1.25rem,2.1vw,1.625rem)] font-medium leading-[1.5] tracking-[-0.02em] text-navy">
-                  To make high-quality commercial real estate financial
-                  analysis, underwriting and investment modelling accessible to
-                  real estate professionals through reliable, independent and
-                  flexible analytical support.
+                  To make high-quality Multifamily financial analysis,
+                  underwriting and investment modelling accessible to US real
+                  estate professionals through reliable, independent and flexible
+                  analytical support.
                 </p>
               </blockquote>
 
               <div className="mt-8 space-y-4">
                 <p className="body-copy">
-                  Commercial real estate decisions are made under time pressure,
+                  Multifamily investment decisions are made under time pressure,
                   with incomplete information and a small number of assumptions
-                  that determine most of the outcome. The analytical work that
-                  supports those decisions is often compressed into whatever time
-                  the deal timetable allows.
+                  that determine most of the outcome. The analytical work behind
+                  those decisions is often compressed into whatever time the deal
+                  timetable allows.
                 </p>
                 <p className="body-copy">
                   DatumCRE Analytics exists to provide a more disciplined
                   alternative: structured, documented analysis delivered by
-                  someone who works on underwriting every week, without the
-                  overhead of a permanent hire or the variability of an
-                  unstructured freelance arrangement.
+                  someone who works on Multifamily underwriting and modelling
+                  directly, without the overhead of a permanent hire or the
+                  variability of an unstructured freelance arrangement.
                 </p>
                 <p className="body-copy">
-                  We work primarily with US-based real estate investment firms,
-                  private equity funds, asset managers, owners and operators,
-                  developers, commercial mortgage lenders and advisory firms —
-                  as an extension of their existing analytical capability.
+                  We work with US-based Multifamily investment firms, private
+                  equity funds, owners and operators, asset managers, developers
+                  and sponsors, and real estate debt teams — as an extension of
+                  their existing analytical capability.
                 </p>
               </div>
 
@@ -136,16 +184,17 @@ export default function AboutPage() {
               <figure>
                 <div className="relative aspect-[4/5] w-full overflow-hidden bg-navy lg:sticky lg:top-32">
                   <Image
-                    src="/images/about-architecture.jpg"
-                    alt="Abstract view of a modern glass and steel commercial building façade"
+                    src="/images/industry-multifamily.jpg"
+                    alt="US multifamily apartment community with brick façades, balconies and landscaped grounds"
                     fill
+                    priority
                     sizes="(max-width: 1024px) 100vw, 40vw"
                     className="img-tone object-cover"
                   />
                 </div>
                 <figcaption className="mt-3 text-[0.625rem] leading-relaxed text-slate/70">
-                  Illustrative architectural photography — not a property
-                  associated with DatumCRE Analytics.
+                  Illustrative architectural photography — not a property or
+                  client asset associated with DatumCRE Analytics.
                 </figcaption>
               </figure>
             </div>
@@ -153,8 +202,87 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Founder */}
+      <section id="founder" className="section border-y border-line bg-ice/40">
+        <div className="container-page">
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-5">
+              <span className="eyebrow">Founder</span>
+              <div className="mt-6 max-w-sm">
+                <FounderPortrait />
+              </div>
+              <div className="mt-6">
+                <h2 className="heading-section">{founder.name}</h2>
+                <p className="mt-3 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-blue">
+                  {founder.role}
+                </p>
+                <p className="mt-4 text-[0.8125rem] leading-[1.7] text-slate">
+                  {siteConfig.region} · Independent analytical support
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 lg:col-start-7">
+              <div className="space-y-4">
+                {founder.biography.map((paragraph) => (
+                  <p key={paragraph} className="body-copy">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+
+              <dl className="mt-9 divide-y divide-line border-y border-line">
+                {founder.qualifications.map((item) => (
+                  <div
+                    key={item.label}
+                    className="grid gap-1 py-3.5 sm:grid-cols-3 sm:gap-4"
+                  >
+                    <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-slate/70">
+                      {item.label}
+                    </dt>
+                    <dd className="text-[0.8125rem] leading-[1.6] text-slate sm:col-span-2">
+                      {item.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="mt-10">
+                <h3 className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-navy">
+                  Areas of expertise
+                </h3>
+                <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
+                  {founder.expertise.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2.5 text-[0.8125rem] leading-[1.6] text-slate"
+                    >
+                      <Check
+                        aria-hidden="true"
+                        className="mt-1 size-3.5 shrink-0 text-blue"
+                        strokeWidth={2}
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-10 border-l-2 border-blue pl-6">
+                <h3 className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-navy">
+                  A note on the philosophy behind DatumCRE
+                </h3>
+                <p className="mt-3 font-heading text-[1.0625rem] font-medium leading-[1.65] text-navy">
+                  “{founder.philosophy}”
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Disciplines */}
-      <section className="section border-y border-line bg-ice/40">
+      <section className="section bg-white">
         <div className="container-page">
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-4">
@@ -163,8 +291,8 @@ export default function AboutPage() {
                 Analytical disciplines, applied with consistency
               </h2>
               <p className="body-copy mt-5">
-                Our work sits across six connected disciplines. Most engagements
-                draw on more than one.
+                Our work sits across six connected Multifamily disciplines. Most
+                engagements draw on more than one.
               </p>
             </div>
 
@@ -195,7 +323,7 @@ export default function AboutPage() {
       </section>
 
       {/* Principles */}
-      <section className="section bg-white">
+      <section className="section border-y border-line bg-ice/40">
         <div className="container-page">
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-4">
@@ -227,63 +355,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Founder */}
-      <section className="section border-t border-line bg-ice/40">
-        <div className="container-page">
-          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="lg:col-span-5">
-              <span className="eyebrow">Founder</span>
-              <h2 className="heading-section mt-5">{founder.name}</h2>
-              <p className="mt-3 text-[0.8125rem] font-semibold uppercase tracking-[0.14em] text-blue">
-                {founder.role}
-              </p>
-              {founder.isPlaceholder ? (
-                <p className="mt-5 inline-flex items-center gap-2 border border-dashed border-blue/40 bg-white px-3 py-2 text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-blue">
-                  <span aria-hidden="true" className="size-1.5 bg-blue" />
-                  Editable placeholder content
-                </p>
-              ) : null}
-            </div>
-
-            <div className="lg:col-span-6 lg:col-start-7">
-              <div className="space-y-4">
-                {founder.biography.map((paragraph) => (
-                  <p key={paragraph} className="body-copy">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-
-              <dl className="mt-8 divide-y divide-line border-y border-line">
-                {founder.credentials.map((item) => (
-                  <div
-                    key={item.label}
-                    className="grid gap-1 py-3.5 sm:grid-cols-3 sm:gap-4"
-                  >
-                    <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-slate/70">
-                      {item.label}
-                    </dt>
-                    <dd className="text-[0.8125rem] text-slate sm:col-span-2">
-                      {item.value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-
-              {founder.isPlaceholder ? (
-                <p className="mt-6 text-[0.6875rem] leading-relaxed text-slate/65">
-                  Founder details are intentionally unpublished placeholders. No
-                  name, credential, tenure or client history has been invented.
-                  Replace the values in <code className="text-navy">src/lib/founder.ts</code>{" "}
-                  with verified information and set <code className="text-navy">isPlaceholder</code>{" "}
-                  to <code className="text-navy">false</code> before launch.
-                </p>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Independence / scope */}
       <section className="section bg-white">
         <div className="container-page">
@@ -300,12 +371,12 @@ export default function AboutPage() {
                   {
                     icon: ShieldCheck,
                     title: "What we provide",
-                    body: "Independent analytical, modelling and research support, prepared from client-supplied information and documented assumptions. Deliverables are decision-support tools intended for review by the client and its professional advisers.",
+                    body: "Independent Multifamily analytical, modelling and research support, prepared from client-supplied information and documented assumptions. Deliverables are decision-support tools intended for review by the client and its professional advisers.",
                   },
                   {
                     icon: Scale,
                     title: "What we do not provide",
-                    body: "Investment advice or recommendations, securities advice, legal, tax or accounting advice, appraisal opinions, or lending commitments. DatumCRE Analytics is not a registered investment adviser, broker-dealer, lender or appraiser.",
+                    body: "Investment advice or recommendations, securities advice, legal, tax or accounting advice, formal appraisal opinions, or lending commitments. DatumCRE Analytics is not a registered investment adviser, broker-dealer, lender or appraiser.",
                   },
                   {
                     icon: Check,
@@ -344,9 +415,9 @@ export default function AboutPage() {
 
       <CTABand
         eyebrow="Work with us"
-        title="Let's discuss the analysis you need."
+        title="Let's discuss the Multifamily analysis you need."
         description="Whether you are evaluating a single acquisition or building a repeatable reporting process, we can outline a scope that fits the decision and the timetable."
-        buttonLabel="Start a Conversation"
+        buttonLabel="Discuss Your Requirements"
         secondaryLabel="View Services"
         secondaryHref="/services"
       />

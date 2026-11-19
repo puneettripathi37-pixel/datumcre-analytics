@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { founder } from "@/lib/founder";
+import { services } from "@/lib/services";
 import { siteConfig } from "@/lib/site";
 
 interface MetadataInput {
@@ -20,8 +22,8 @@ export function buildMetadata({
   title,
   description,
   path,
-  image = "/images/og-default.jpg",
-  imageAlt = "DatumCRE Analytics — commercial real estate financial modelling and investment analytics",
+  image = "/images/og-multifamily.jpg",
+  imageAlt = "DatumCRE Analytics — independent Multifamily real estate financial modelling and underwriting",
   noindex = false,
   type = "website",
   publishedTime,
@@ -54,7 +56,7 @@ export function buildMetadata({
   };
 }
 
-/** Organization + WebSite structured data, emitted once in the root layout. */
+/** Organization, founder and service structured data, emitted in the root layout. */
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
@@ -67,26 +69,51 @@ export function organizationJsonLd() {
         url: siteConfig.url,
         description: siteConfig.description,
         slogan: siteConfig.tagline,
-        email: siteConfig.contactEmail,
+        ...(siteConfig.contactEmailConfigured
+          ? { email: siteConfig.contactEmail }
+          : {}),
+        ...(siteConfig.linkedinConfigured
+          ? { sameAs: [siteConfig.linkedinUrl] }
+          : {}),
         areaServed: {
           "@type": "Country",
           name: "United States",
         },
         knowsAbout: [
-          "Commercial real estate financial modelling",
-          "Real estate underwriting",
-          "Investment analytics",
-          "Valuation support",
-          "Commercial mortgage underwriting",
-          "Portfolio reporting",
+          "Multifamily underwriting",
+          "Multifamily financial modelling",
+          "Multifamily acquisition analysis",
+          "Multifamily investment analytics",
+          "US Multifamily underwriting",
+          "Multifamily valuation support",
+          "Real estate portfolio analytics",
+          "Multifamily development modelling",
         ],
-        serviceType: [
-          "Real estate financial modelling",
-          "Investment and portfolio analytics",
-          "Valuation and asset analysis",
-          "Commercial mortgage underwriting",
-          "Reporting and financial research",
-        ],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Multifamily analytical services",
+          itemListElement: services.map((service) => ({
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: service.title,
+              description: service.summary,
+              provider: { "@id": `${siteConfig.url}/#organization` },
+            },
+          })),
+        },
+      },
+      {
+        "@type": "Person",
+        "@id": `${siteConfig.url}/#founder`,
+        name: founder.name,
+        jobTitle: founder.role,
+        description:
+          "Real estate finance and financial modelling professional focused on US Multifamily underwriting, valuation support and investment analytics.",
+        worksFor: { "@id": `${siteConfig.url}/#organization` },
+        ...(founder.imageEnabled
+          ? { image: `${siteConfig.url}${founder.image}` }
+          : {}),
       },
       {
         "@type": "WebSite",

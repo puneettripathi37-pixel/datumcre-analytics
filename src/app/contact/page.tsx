@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, ShieldCheck } from "lucide-react";
+import { ExternalLink, Mail, MapPin, ShieldCheck } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { buildMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Contact — Discuss Your Real Estate Analytics Requirements",
+  title: "Contact — Multifamily Investment Analytics Requirements",
   description:
-    "Contact DatumCRE Analytics to discuss commercial real estate financial modelling, acquisition underwriting, investment analytics, valuation support or mortgage underwriting.",
+    "Discuss Multifamily acquisition underwriting, development modelling, valuation support, portfolio analytics or debt analysis with DatumCRE Analytics.",
   path: "/contact",
 });
 
 const included = [
-  "Property type, market and transaction stage",
+  "Asset strategy, market and approximate unit count",
   "The decision or deliverable you need to support",
-  "Any deadline or investment committee date",
+  "Any investment committee, closing or reporting deadline",
   "Whether a model exists and needs review or rebuilding",
 ];
 
@@ -24,7 +24,7 @@ export default function ContactPage() {
     <>
       <PageHero
         eyebrow="Contact"
-        title="Let's discuss your analytical requirements"
+        title="Let's Discuss Your Multifamily Investment Analytics Requirements."
         description="Share the context and we will respond with a suggested scope, the deliverables involved and any information we would need to begin."
         crumbs={[{ label: "Contact" }]}
       />
@@ -39,8 +39,8 @@ export default function ContactPage() {
               </h2>
               <p className="body-copy mt-5">
                 You do not need a finished brief. A description of the asset, the
-                decision and the deadline is enough for an initial conversation
-                about scope.
+                investment stage, the decision and the deadline is enough for an
+                initial conversation about scope.
               </p>
 
               <div className="mt-9 border-y border-line py-6">
@@ -64,32 +64,53 @@ export default function ContactPage() {
               </div>
 
               <dl className="mt-7 space-y-6">
-                <div className="flex items-start gap-3">
-                  <Mail
-                    aria-hidden="true"
-                    className="mt-0.5 size-4 shrink-0 text-blue"
-                    strokeWidth={1.5}
-                  />
-                  <div>
-                    <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-slate/70">
-                      Email
-                    </dt>
-                    <dd className="mt-1">
-                      <a
-                        href={`mailto:${siteConfig.contactEmail}`}
-                        className="text-[0.8125rem] text-navy underline decoration-line underline-offset-4 transition-colors hover:text-blue"
-                      >
-                        {siteConfig.contactEmail}
-                      </a>
-                    </dd>
-                    {siteConfig.contactEmailIsPlaceholder ? (
-                      <dd className="mt-2 text-[0.625rem] leading-relaxed text-slate/60">
-                        Placeholder address pending publication of the final
-                        business email.
+                {siteConfig.contactEmailConfigured ? (
+                  <div className="flex items-start gap-3">
+                    <Mail
+                      aria-hidden="true"
+                      className="mt-0.5 size-4 shrink-0 text-blue"
+                      strokeWidth={1.5}
+                    />
+                    <div>
+                      <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-slate/70">
+                        Email
+                      </dt>
+                      <dd className="mt-1">
+                        <a
+                          href={`mailto:${siteConfig.contactEmail}`}
+                          className="text-[0.8125rem] text-navy underline decoration-line underline-offset-4 transition-colors hover:text-blue"
+                        >
+                          {siteConfig.contactEmail}
+                        </a>
                       </dd>
-                    ) : null}
+                    </div>
                   </div>
-                </div>
+                ) : null}
+
+                {siteConfig.linkedinConfigured ? (
+                  <div className="flex items-start gap-3">
+                    <ExternalLink
+                      aria-hidden="true"
+                      className="mt-0.5 size-4 shrink-0 text-blue"
+                      strokeWidth={1.5}
+                    />
+                    <div>
+                      <dt className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-slate/70">
+                        LinkedIn
+                      </dt>
+                      <dd className="mt-1">
+                        <a
+                          href={siteConfig.linkedinUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[0.8125rem] text-navy underline decoration-line underline-offset-4 transition-colors hover:text-blue"
+                        >
+                          Puneet Tripathi
+                        </a>
+                      </dd>
+                    </div>
+                  </div>
+                ) : null}
 
                 <div className="flex items-start gap-3">
                   <MapPin
@@ -102,7 +123,7 @@ export default function ContactPage() {
                       Coverage
                     </dt>
                     <dd className="mt-1 text-[0.8125rem] text-slate">
-                      United States · Remote-first engagements
+                      {siteConfig.coverage}
                     </dd>
                   </div>
                 </div>
@@ -132,10 +153,10 @@ export default function ContactPage() {
                   <strong className="font-semibold text-navy">
                     Scope of services:
                   </strong>{" "}
-                  DatumCRE Analytics provides analytical and modelling support.
-                  We do not provide investment advice, securities
-                  recommendations, legal, tax or accounting advice, appraisals, or
-                  lending commitments.
+                  DatumCRE Analytics provides independent analytical and modelling
+                  support. We do not provide investment advice, securities
+                  recommendations, legal, tax or accounting advice, formal
+                  appraisal opinions, or lending commitments.
                 </p>
               </div>
             </div>

@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { propertyTypeOptions, serviceOptions } from "@/lib/site";
+import {
+  investmentStageOptions,
+  serviceOptions,
+  timelineOptions,
+} from "@/lib/site";
 
 /**
  * Single source of truth for enquiry validation.
@@ -31,14 +35,33 @@ export const contactSchema = z.object({
   service: z.enum(serviceOptions, {
     message: "Please select the service you require.",
   }),
-  propertyType: z.enum(propertyTypeOptions, {
-    message: "Please select a property type.",
+  investmentStage: z.enum(investmentStageOptions, {
+    message: "Please select the investment stage.",
   }),
+  units: z
+    .string()
+    .trim()
+    .max(20, "Please keep the unit count brief.")
+    .optional()
+    .default("")
+    .refine(
+      (value) => value === "" || /^[0-9][0-9,\s]*$/.test(value),
+      "Please enter a whole number of units, or leave blank.",
+    ),
+  market: z
+    .string()
+    .trim()
+    .max(120, "Please keep the property location under 120 characters.")
+    .optional()
+    .default(""),
   requirements: z
     .string()
     .trim()
     .min(20, "Please provide at least a short sentence (20 characters).")
     .max(3000, "Please keep your description under 3,000 characters."),
+  timeline: z.enum(timelineOptions, {
+    message: "Please select an expected timeline.",
+  }),
   consent: z.literal(true, {
     message: "Please confirm you understand how your information is used.",
   }),
@@ -56,7 +79,10 @@ export const contactFieldNames = [
   "companyName",
   "jobTitle",
   "service",
-  "propertyType",
+  "investmentStage",
+  "units",
+  "market",
   "requirements",
+  "timeline",
   "consent",
 ] as const;

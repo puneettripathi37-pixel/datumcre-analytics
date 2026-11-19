@@ -1,76 +1,129 @@
 /**
  * Global site configuration.
  *
- * Central place for brand, navigation and contact details.
- * NOTE: contact details are placeholders until the business supplies real
- * information. The `.example` domain is reserved by IANA and will never
- * resolve, which makes it safe for staging deployments.
+ * Central place for brand, navigation, contact details and form options.
+ *
+ * CONTACT DETAILS
+ * ---------------
+ * The business email and LinkedIn URL are intentionally empty until verified
+ * values are supplied. When `NEXT_PUBLIC_CONTACT_EMAIL` is set, every email
+ * link and display across the site updates automatically. Placeholder
+ * addresses are never rendered to visitors.
  */
+
+const contactEmail =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "";
+
+const linkedinUrl =
+  process.env.NEXT_PUBLIC_LINKEDIN_URL?.trim() || "";
+
+const businessLocation =
+  process.env.NEXT_PUBLIC_BUSINESS_LOCATION?.trim() || "United States";
+
+const coverage = `${businessLocation} · Remote-first engagements`;
+
+/**
+ * Canonical site origin.
+ *
+ * Priority:
+ *   1. NEXT_PUBLIC_SITE_URL (set this in production)
+ *   2. VERCEL_PROJECT_PRODUCTION_URL (provided automatically by Vercel)
+ *   3. localhost, so local builds never publish an invented domain
+ */
+const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+const siteUrl = (
+  configuredUrl || (vercelUrl ? `https://${vercelUrl}` : "http://localhost:3000")
+).replace(/\/$/, "");
 
 export const siteConfig = {
   name: "DatumCRE Analytics",
   shortName: "DatumCRE",
-  tagline: "Clarity in Numbers. Confidence in Decisions.",
+  tagline: "Clarity. Precision. Better Investment Decisions.",
+  positioning:
+    "Independent Multifamily Real Estate Financial Modelling, Underwriting & Investment Analytics.",
   description:
-    "Independent commercial real estate financial modelling, underwriting and investment analytics for informed real estate decisions.",
-  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.datumcre.example",
+    "Independent Multifamily real estate financial modelling, acquisition underwriting and investment analytics for US investors, owners, operators and developers.",
+  url: siteUrl,
   locale: "en_US",
-  // TODO(content): replace with the published business email before launch.
-  contactEmail: "inquiries@datumcre.example",
-  contactEmailIsPlaceholder: true,
   region: "United States",
+  coverage,
+  /** Business email. Empty until a verified address is supplied. */
+  contactEmail,
+  /** True when a real, publishable business email has been configured. */
+  contactEmailConfigured: Boolean(contactEmail),
+  /** Optional LinkedIn profile. Empty until a verified URL is supplied. */
+  linkedinUrl,
+  linkedinConfigured: Boolean(linkedinUrl),
+  businessLocation,
   legalDisclaimer:
-    "DatumCRE Analytics provides independent analytical, modelling and research support. We do not provide investment advice, securities recommendations, legal, tax or accounting advice, or lending commitments. All analysis is prepared from information supplied by the client and stated assumptions, and should be independently reviewed before use in any transaction.",
+    "DatumCRE Analytics provides independent analytical and modelling support. We do not provide investment, securities, legal, tax, accounting or lending advice, or formal appraisal opinions. Our work is prepared from client-supplied information and stated assumptions, and should be independently reviewed before use in any transaction.",
 } as const;
 
 export const primaryNav = [
+  { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
-  { label: "Industries", href: "/industries" },
-  { label: "Insights", href: "/insights" },
+  { label: "Multifamily", href: "/multifamily" },
   { label: "About", href: "/about" },
+  { label: "Insights", href: "/insights" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
 export const footerNav = {
   services: [
-    { label: "Real Estate Financial Modelling", href: "/services#financial-modelling" },
-    { label: "Investment & Portfolio Analytics", href: "/services#investment-analytics" },
-    { label: "Valuation & Asset Analysis", href: "/services#valuation-analysis" },
-    { label: "Commercial Mortgage Underwriting", href: "/services#mortgage-underwriting" },
-    { label: "Reporting & Financial Research", href: "/services#reporting-research" },
-  ],
-  industries: [
-    { label: "Multifamily", href: "/industries#multifamily" },
-    { label: "Industrial & Logistics", href: "/industries#industrial-logistics" },
-    { label: "Retail", href: "/industries#retail" },
-    { label: "Office", href: "/industries#office" },
-    { label: "Hospitality", href: "/industries#hospitality" },
-    { label: "Mixed-Use", href: "/industries#mixed-use" },
+    {
+      label: "Acquisition Underwriting",
+      href: "/services#multifamily-acquisition-underwriting",
+    },
+    {
+      label: "Development & Investment Modelling",
+      href: "/services#development-investment-modelling",
+    },
+    {
+      label: "Valuation & Asset-Level Analysis",
+      href: "/services#valuation-asset-level-analysis",
+    },
+    {
+      label: "Portfolio & Asset Management Analytics",
+      href: "/services#portfolio-asset-management-analytics",
+    },
+    {
+      label: "Debt & Financing Analysis",
+      href: "/services#multifamily-debt-financing",
+    },
   ],
   company: [
     { label: "About DatumCRE", href: "/about" },
     { label: "Insights", href: "/insights" },
     { label: "Contact", href: "/contact" },
     { label: "Privacy Policy", href: "/privacy" },
+    { label: "Disclaimer", href: "/disclaimer" },
   ],
 } as const;
 
 export const serviceOptions = [
-  "Financial Modelling",
   "Acquisition Underwriting",
-  "Investment Analytics",
+  "Development Modelling",
   "Valuation Support",
-  "Mortgage Underwriting",
+  "Portfolio Analytics",
+  "Debt & Financing Analysis",
+  "Other Multifamily Analytical Support",
+] as const;
+
+export const investmentStageOptions = [
+  "Acquisition",
+  "Development",
+  "Stabilised Operations",
+  "Refinancing",
+  "Disposition",
   "Portfolio Reporting",
   "Other",
 ] as const;
 
-export const propertyTypeOptions = [
-  "Multifamily",
-  "Industrial",
-  "Retail",
-  "Office",
-  "Hospitality",
-  "Mixed-Use",
-  "Other",
+export const timelineOptions = [
+  "Immediate (next 30 days)",
+  "1–3 months",
+  "3–6 months",
+  "6+ months",
+  "Ongoing analytical support",
 ] as const;

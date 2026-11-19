@@ -31,14 +31,16 @@ export function Header() {
   }, [open]);
 
   const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(`${href}/`);
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <>
       <div className="hidden border-b border-white/10 bg-navy-deep lg:block">
         <div className="container-page flex h-9 items-center justify-between">
           <p className="text-[0.625rem] font-medium uppercase tracking-[0.2em] text-white/55">
-            Independent Commercial Real Estate Analytics
+            Independent Multifamily Real Estate Analytics
           </p>
           <div className="flex items-center gap-6">
             <span className="inline-flex items-center gap-1.5 text-[0.625rem] font-medium uppercase tracking-[0.18em] text-white/55">

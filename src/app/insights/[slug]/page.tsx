@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Clock, Info } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTABand } from "@/components/layout/CTABand";
 import { buildMetadata } from "@/lib/seo";
@@ -13,13 +13,16 @@ import {
 } from "@/lib/insights";
 import { formatDate } from "@/lib/utils";
 import { siteConfig } from "@/lib/site";
+import { founder } from "@/lib/founder";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
-  return articles.map((article) => ({ slug: article.slug }));
+  return articles
+    .filter((article) => article.status === "published")
+    .map((article) => ({ slug: article.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -51,7 +54,7 @@ export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const article = getArticle(slug);
 
-  if (!article) notFound();
+  if (!article || article.status !== "published") notFound();
 
   const related = getRelatedArticles(article);
 
@@ -65,7 +68,11 @@ export default async function ArticlePage({ params }: PageProps) {
     image: `${siteConfig.url}${article.image}`,
     articleSection: article.category,
     inLanguage: "en-US",
-    author: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
+    author: {
+      "@type": "Person",
+      name: founder.name,
+      jobTitle: founder.role,
+    },
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
@@ -93,12 +100,6 @@ export default async function ArticlePage({ params }: PageProps) {
                   <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-blue">
                     {article.category}
                   </span>
-                  {article.status === "draft" ? (
-                    <span className="inline-flex items-center gap-1.5 border border-blue/30 bg-white px-2 py-1 text-[0.5625rem] font-semibold uppercase tracking-[0.14em] text-blue">
-                      <span aria-hidden="true" className="size-1.5 bg-blue" />
-                      Draft — not final research
-                    </span>
-                  ) : null}
                 </div>
 
                 <h1 className="display-2 mt-5 max-w-[24ch]">{article.title}</h1>
@@ -119,28 +120,6 @@ export default async function ArticlePage({ params }: PageProps) {
             </div>
           </div>
         </header>
-
-        {article.status === "draft" ? (
-          <div className="border-b border-line bg-ice/50">
-            <div className="container-page py-5">
-              <div className="flex items-start gap-3">
-                <Info
-                  aria-hidden="true"
-                  className="mt-0.5 size-4 shrink-0 text-blue"
-                  strokeWidth={1.75}
-                />
-                <p className="max-w-3xl text-[0.75rem] leading-[1.7] text-slate">
-                  <strong className="font-semibold text-navy">Editorial note:</strong>{" "}
-                  this article is a working draft retained for review. It is
-                  published as a preview and may be revised or withdrawn. It is
-                  general commentary on analytical practice, not investment,
-                  legal, tax or accounting advice, and it should not be relied on
-                  for any transaction.
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : null}
 
         <div className="bg-white">
           <div className="container-page py-10 md:py-14">
@@ -226,9 +205,7 @@ export default async function ArticlePage({ params }: PageProps) {
                     </div>
                     <div className="flex items-baseline justify-between gap-4 py-2.5">
                       <dt className="text-slate">Status</dt>
-                      <dd className="text-navy">
-                        {article.status === "draft" ? "Working draft" : "Published"}
-                      </dd>
+                      <dd className="text-navy">Published</dd>
                     </div>
                   </dl>
                   <p className="mt-5 border-t border-navy/10 pt-4 text-[0.6875rem] leading-relaxed text-slate/80">
@@ -288,10 +265,10 @@ export default async function ArticlePage({ params }: PageProps) {
       </article>
 
       <CTABand
-        eyebrow="Analytical support"
-        title="Applying these ideas to a live transaction?"
-        description="We can build or review the model behind the decision — acquisition, development, financing or valuation."
-        buttonLabel="Get in Touch"
+        eyebrow="Multifamily analytical support"
+        title="Applying these ideas to a live Multifamily transaction?"
+        description="We can build or review the model behind the decision — acquisition, development, refinancing or valuation."
+        buttonLabel="Discuss Your Requirements"
       />
 
       <script

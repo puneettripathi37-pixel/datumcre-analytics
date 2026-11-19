@@ -2,7 +2,7 @@
   "name": "datumcre-analytics",
   "version": "1.0.0",
   "private": true,
-  "description": "Corporate website for DatumCRE Analytics — independent commercial real estate financial modelling, underwriting and investment analytics.",
+  "description": "Corporate website for DatumCRE Analytics — independent Multifamily real estate financial modelling, underwriting and investment analytics.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

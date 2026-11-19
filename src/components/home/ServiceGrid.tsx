@@ -48,7 +48,7 @@ export function ServiceGrid({ className }: { className?: string }) {
           </ul>
 
           <span className="mt-6 inline-flex items-center gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-navy transition-colors group-hover:text-blue">
-            Learn More
+            Service detail
             <ArrowRight
               aria-hidden="true"
               className="size-3.5 transition-transform duration-200 group-hover:translate-x-1"

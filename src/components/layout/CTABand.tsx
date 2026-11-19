@@ -14,10 +14,10 @@ interface CTABandProps {
 
 export function CTABand({
   eyebrow = "Next step",
-  title = "Let's Bring Greater Clarity to Your Real Estate Investments.",
+  title = "Let's Bring Greater Clarity to Your Multifamily Investments.",
   description =
-    "Whether you need acquisition underwriting, financial modelling, valuation support or portfolio analytics, let's discuss how DatumCRE can support your analytical requirements.",
-  buttonLabel = "Get in Touch",
+    "Whether you need acquisition underwriting, development modelling, valuation support or portfolio analytics, let's discuss how DatumCRE can support your analytical requirements.",
+  buttonLabel = "Discuss Your Requirements",
   buttonHref = "/contact",
   secondaryLabel,
   secondaryHref,

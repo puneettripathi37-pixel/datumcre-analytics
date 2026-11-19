@@ -37,10 +37,10 @@ export default function NotFound() {
           <nav aria-label="Suggested pages" className="mt-12 border-t border-line pt-6">
             <ul className="grid gap-3 sm:grid-cols-2">
               {[
-                { label: "Services", href: "/services", detail: "Modelling, analytics, valuation and debt" },
-                { label: "Industries", href: "/industries", detail: "Sector-specific underwriting" },
-                { label: "Insights", href: "/insights", detail: "Notes on underwriting practice" },
-                { label: "About", href: "/about", detail: "Approach and independence" },
+                { label: "Services", href: "/services", detail: "Multifamily underwriting, modelling and analytics" },
+                { label: "Multifamily", href: "/multifamily", detail: "Sector analysis and underwriting considerations" },
+                { label: "Insights", href: "/insights", detail: "Notes on Multifamily underwriting practice" },
+                { label: "About", href: "/about", detail: "Founder profile and approach" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link

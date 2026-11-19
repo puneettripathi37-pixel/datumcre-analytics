@@ -22,7 +22,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Commercial Real Estate Financial Modelling & Underwriting`,
+    default: `${siteConfig.name} | Multifamily Real Estate Financial Modelling & Underwriting`,
     template: `%s | ${siteConfig.shortName}`,
   },
   description: siteConfig.description,
@@ -37,22 +37,22 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     locale: siteConfig.locale,
     url: "/",
-    title: `${siteConfig.name} | Clarity in Numbers. Confidence in Decisions.`,
+    title: `${siteConfig.name} | ${siteConfig.tagline}`,
     description: siteConfig.description,
     images: [
       {
-        url: "/images/og-default.jpg",
+        url: "/images/og-multifamily.jpg",
         width: 1200,
         height: 630,
-        alt: "DatumCRE Analytics — independent commercial real estate financial modelling and underwriting",
+        alt: "DatumCRE Analytics — independent Multifamily real estate financial modelling and underwriting",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} | Clarity in Numbers. Confidence in Decisions.`,
+    title: `${siteConfig.name} | ${siteConfig.tagline}`,
     description: siteConfig.description,
-    images: ["/images/og-default.jpg"],
+    images: ["/images/og-multifamily.jpg"],
   },
   robots: {
     index: true,
@@ -75,7 +75,11 @@ export default function RootLayout({
   const jsonLd = organizationJsonLd();
 
   return (
-    <html lang="en-US" className={`${montserrat.variable} ${inter.variable}`}>
+    <html
+      lang="en-US"
+      data-scroll-behavior="smooth"
+      className={`${montserrat.variable} ${inter.variable}`}
+    >
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"

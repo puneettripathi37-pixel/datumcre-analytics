@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Clock, Info } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Clock } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { CTABand } from "@/components/layout/CTABand";
 import { buildMetadata } from "@/lib/seo";
@@ -9,20 +9,11 @@ import { sortedArticles } from "@/lib/insights";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Insights — Commercial Real Estate Analysis & Underwriting",
+  title: "Multifamily Insights — Underwriting, Modelling & Valuation",
   description:
-    "Practical notes on commercial real estate underwriting, financial modelling, lending metrics, waterfall structures and valuation assumptions from DatumCRE Analytics.",
+    "Practical Multifamily real estate analysis: rent roll and T-12 analysis, NOI normalisation, valuation, debt metrics, development modelling and JV waterfall structures.",
   path: "/insights",
 });
-
-function DraftBadge() {
-  return (
-    <span className="inline-flex items-center gap-1.5 border border-blue/30 bg-white/90 px-2 py-1 text-[0.5625rem] font-semibold uppercase tracking-[0.14em] text-blue">
-      <span aria-hidden="true" className="size-1.5 bg-blue" />
-      Draft
-    </span>
-  );
-}
 
 export default function InsightsPage() {
   const [featured, ...rest] = sortedArticles;
@@ -31,31 +22,10 @@ export default function InsightsPage() {
     <>
       <PageHero
         eyebrow="Insights"
-        title="Notes on the assumptions that decide outcomes"
-        description="Practical commentary on underwriting, modelling, lending metrics and valuation — written for the people who have to defend the numbers."
+        title="Multifamily analysis, written for the people who defend the numbers"
+        description="Practical commentary on apartment underwriting, financial modelling, valuation and debt — with assumptions stated and illustrative examples labelled."
         crumbs={[{ label: "Insights" }]}
       />
-
-      <div className="border-b border-line bg-white">
-        <div className="container-page py-6">
-          <div className="flex items-start gap-3 border border-dashed border-blue/35 bg-ice/40 px-4 py-3">
-            <Info
-              aria-hidden="true"
-              className="mt-0.5 size-4 shrink-0 text-blue"
-              strokeWidth={1.75}
-            />
-            <p className="text-[0.75rem] leading-[1.7] text-slate">
-              <strong className="font-semibold text-navy">
-                Editorial status:
-              </strong>{" "}
-              the articles below are working drafts prepared for internal review.
-              They are published here as previews and should not be treated as
-              final research, advice or a statement of DatumCRE&apos;s current
-              views. Each article is labelled accordingly.
-            </p>
-          </div>
-        </div>
-      </div>
 
       <section className="section bg-white">
         <div className="container-page">
@@ -76,12 +46,9 @@ export default function InsightsPage() {
             </div>
             <div className="flex flex-col justify-between p-7 lg:col-span-5 lg:p-10">
               <div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-blue">
-                    {featured.category}
-                  </span>
-                  <DraftBadge />
-                </div>
+                <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-blue">
+                  {featured.category}
+                </span>
                 <h2 className="mt-5 font-heading text-[clamp(1.375rem,2.2vw,1.875rem)] font-semibold leading-[1.24] tracking-[-0.025em] text-navy">
                   <Link href={`/insights/${featured.slug}`}>{featured.title}</Link>
                 </h2>
@@ -126,12 +93,9 @@ export default function InsightsPage() {
                   </Link>
                 </div>
                 <div className="flex flex-1 flex-col border border-t-0 border-line p-6">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-blue">
-                      {article.category}
-                    </span>
-                    <DraftBadge />
-                  </div>
+                  <span className="text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-blue">
+                    {article.category}
+                  </span>
                   <h3 className="mt-4 font-heading text-[1.0625rem] font-semibold leading-[1.35] tracking-[-0.01em] text-navy">
                     <Link href={`/insights/${article.slug}`} className="transition-colors hover:text-blue">
                       {article.title}
@@ -154,14 +118,21 @@ export default function InsightsPage() {
               </article>
             ))}
           </div>
+
+          <p className="mt-12 max-w-3xl border-t border-line pt-6 text-[0.6875rem] leading-relaxed text-slate/65">
+            Articles are general commentary on analytical practice. Illustrative
+            figures are fictional and are not market benchmarks, client results or
+            investment advice. All analysis should be independently reviewed for
+            any specific transaction.
+          </p>
         </div>
       </section>
 
       <CTABand
         eyebrow="Beyond the notes"
-        title="Have a live question these articles do not cover?"
+        title="Have a live Multifamily question these articles do not cover?"
         description="If you are working through a specific underwriting, financing or valuation issue, we can discuss how it would be analysed for your transaction."
-        buttonLabel="Get in Touch"
+        buttonLabel="Discuss Your Requirements"
       />
     </>
   );

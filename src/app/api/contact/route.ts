@@ -9,9 +9,9 @@ export const dynamic = "force-dynamic";
 /**
  * Simple in-memory rate limiter.
  *
- * This is adequate for a single-instance deployment and for local development.
- * On a multi-instance or serverless host, replace with a shared store
- * (Redis, Upstash, a database table, or the platform's edge rate limiting).
+ * Adequate for a single-instance deployment and local development. On a
+ * multi-instance or serverless host, replace with a shared store (Redis,
+ * Upstash, a database table, or the platform's edge rate limiting).
  */
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS = 5;
@@ -63,12 +63,16 @@ function redactEmail(email: string) {
   return `${name.slice(0, 2)}***@${domain}`;
 }
 
+function contactRecipient() {
+  return process.env.CONTACT_TO_EMAIL?.trim() || siteConfig.contactEmail;
+}
+
 function smtpConfigured() {
   return Boolean(
     process.env.SMTP_HOST &&
       process.env.SMTP_USER &&
       process.env.SMTP_PASSWORD &&
-      process.env.CONTACT_TO_EMAIL,
+      contactRecipient(),
   );
 }
 
@@ -103,7 +107,7 @@ export async function POST(request: Request) {
 
     // 1. Honeypot. Bots fill hidden fields; accept silently so they do not retry.
     if (typeof candidate.companyWebsite === "string" && candidate.companyWebsite.trim() !== "") {
-      return NextResponse.json({ ok: true, reference: buildReference() });
+      return NextResponse.json({ ok: true, reference: buildReference(), delivered: true });
     }
 
     // 2. Timing check. A genuine human cannot complete the form instantly.
@@ -152,13 +156,16 @@ export async function POST(request: Request) {
     const reference = buildReference();
 
     const lines = [
-      `Reference:        ${reference}`,
-      `Full name:        ${data.fullName}`,
-      `Business email:   ${data.businessEmail}`,
-      `Company:          ${data.companyName}`,
-      `Job title:        ${data.jobTitle}`,
-      `Service required: ${data.service}`,
-      `Property type:    ${data.propertyType}`,
+      `Reference:          ${reference}`,
+      `Full name:          ${data.fullName}`,
+      `Business email:     ${data.businessEmail}`,
+      `Company:            ${data.companyName}`,
+      `Job title:          ${data.jobTitle}`,
+      `Service required:   ${data.service}`,
+      `Investment stage:   ${data.investmentStage}`,
+      `Units:              ${data.units || "Not provided"}`,
+      `Property / market:  ${data.market || "Not provided"}`,
+      `Expected timeline:  ${data.timeline}`,
       "",
       "Requirements:",
       data.requirements,
@@ -167,21 +174,23 @@ export async function POST(request: Request) {
     ];
 
     if (!smtpConfigured()) {
-      // Structured integration point: no credentials configured, so the enquiry
-      // is validated and logged in redacted form instead of being emailed.
-      // See README → "Contact form configuration".
-      console.warn(
-        "[contact] SMTP is not configured — enquiry validated but not delivered.\n" +
+      // Do not report success: an enquiry that is only logged has not been
+      // delivered. Configure SMTP and CONTACT_TO_EMAIL before launch.
+      console.error(
+        "[contact] SMTP is not configured — enquiry was validated but not delivered.\n" +
           lines.join("\n").replace(data.businessEmail, redactEmail(data.businessEmail)),
       );
 
-      return NextResponse.json({
-        ok: true,
-        reference,
-        delivered: false,
-        message:
-          "Your enquiry has been received. Email delivery is not configured on this environment; see the deployment notes.",
-      });
+      return NextResponse.json(
+        {
+          ok: false,
+          delivered: false,
+          message: siteConfig.contactEmailConfigured
+            ? "The enquiry form is temporarily unavailable. Please try again later or contact us by email."
+            : "The enquiry form is temporarily unavailable. Please try again later.",
+        },
+        { status: 503 },
+      );
     }
 
     const port = Number(process.env.SMTP_PORT ?? 587);
@@ -196,13 +205,13 @@ export async function POST(request: Request) {
       tls: { minVersion: "TLSv1.2" },
     });
 
-    const to = process.env.CONTACT_TO_EMAIL as string;
+    const to = contactRecipient() as string;
     const from = process.env.CONTACT_FROM_EMAIL || (process.env.SMTP_USER as string);
     const replyTo = process.env.CONTACT_REPLY_TO_EMAIL || data.businessEmail;
 
     const html = `
       <div style="font-family:Inter,Arial,sans-serif;color:#172B3A;line-height:1.6">
-        <h2 style="font-family:Montserrat,Arial,sans-serif;color:#1D3F5A;margin:0 0 4px">New website enquiry</h2>
+        <h2 style="font-family:Montserrat,Arial,sans-serif;color:#1D3F5A;margin:0 0 4px">New Multifamily website enquiry</h2>
         <p style="margin:0 0 20px;color:#4C6170;font-size:13px">Reference ${escapeHtml(reference)}</p>
         <table style="border-collapse:collapse;font-size:13px">
           ${[
@@ -211,7 +220,10 @@ export async function POST(request: Request) {
             ["Company", data.companyName],
             ["Job title", data.jobTitle],
             ["Service required", data.service],
-            ["Property type", data.propertyType],
+            ["Investment stage", data.investmentStage],
+            ["Number of units", data.units || "Not provided"],
+            ["Property / market", data.market || "Not provided"],
+            ["Expected timeline", data.timeline],
           ]
             .map(
               ([label, value]) =>
@@ -235,7 +247,7 @@ export async function POST(request: Request) {
       to,
       from,
       replyTo,
-      subject: `Website enquiry — ${data.companyName} — ${data.service}`,
+      subject: `Multifamily enquiry — ${data.companyName} — ${data.service}`,
       text: lines.join("\n"),
       html,
     });
@@ -246,6 +258,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         ok: false,
+        delivered: false,
         message:
           "We could not process your enquiry due to a server error. Please try again shortly.",
       },

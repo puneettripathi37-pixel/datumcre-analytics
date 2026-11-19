@@ -1,7 +1,7 @@
 import {
   Calculator,
   ChartLine,
-  FileSpreadsheet,
+  Construction,
   Landmark,
   Percent,
   type LucideIcon,
@@ -10,11 +10,11 @@ import type { ServiceIconKey } from "@/lib/services";
 import { cn } from "@/lib/utils";
 
 const icons: Record<ServiceIconKey, LucideIcon> = {
-  model: Calculator,
-  analytics: ChartLine,
+  acquisition: Calculator,
+  development: Construction,
   valuation: Landmark,
+  portfolio: ChartLine,
   debt: Percent,
-  reporting: FileSpreadsheet,
 };
 
 interface ServiceIconProps {

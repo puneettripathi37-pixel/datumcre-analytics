@@ -9,9 +9,9 @@ import { buildMetadata } from "@/lib/seo";
 import { services } from "@/lib/services";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Services — Modelling, Underwriting, Analytics & Valuation Support",
+  title: "Multifamily Underwriting, Modelling & Analytics Services",
   description:
-    "Commercial real estate financial modelling, investment and portfolio analytics, valuation support, mortgage underwriting and reporting services for US real estate professionals.",
+    "Multifamily acquisition underwriting, development modelling, valuation support, portfolio analytics and debt analysis for US real estate investors, owners, operators and developers.",
   path: "/services",
 });
 
@@ -20,8 +20,8 @@ export default function ServicesPage() {
     <>
       <PageHero
         eyebrow="Services"
-        title="Analytical support built around the investment decision"
-        description="Engage a single discipline or combine several across the investment lifecycle. Each engagement is scoped to the transaction, the audience and the timetable."
+        title="Specialist Multifamily analytical support, built around the investment decision"
+        description="Engage a single discipline or combine several across the investment lifecycle. Every engagement is scoped to the asset, the decision, the audience and the timetable."
         crumbs={[{ label: "Services" }]}
       >
         <div className="mt-7 flex flex-wrap gap-2">
@@ -47,13 +47,14 @@ export default function ServicesPage() {
             />
             <p className="max-w-4xl text-[0.8125rem] leading-[1.75] text-slate">
               <strong className="font-semibold text-navy">Scope of work.</strong>{" "}
-              DatumCRE Analytics provides analytical, modelling and research
-              support. We are not a registered investment adviser, broker-dealer,
-              lender, appraiser, law firm or accounting firm, and we do not
-              provide investment recommendations, securities advice, legal, tax
-              or accounting advice, or lending commitments. Analyses are prepared
-              from client-supplied information and stated assumptions, and are
-              intended to support — not replace — the client&apos;s own
+              DatumCRE Analytics provides independent analytical, modelling and
+              research support focused on US Multifamily real estate. We are not a
+              registered investment adviser, broker-dealer, lender, appraiser, law
+              firm or accounting firm, and we do not provide investment
+              recommendations, securities advice, legal, tax or accounting advice,
+              lending commitments or formal appraisal opinions. Analyses are
+              prepared from client-supplied information and stated assumptions,
+              and are intended to support — not replace — the client&apos;s own
               judgement, due diligence and professional advisers.
             </p>
           </div>
@@ -95,7 +96,7 @@ export default function ServicesPage() {
                           Engagement format
                         </dt>
                         <dd className="mt-1.5 text-[0.8125rem] text-navy">
-                          Fixed-scope project or ongoing retainer
+                          {service.engagement}
                         </dd>
                       </div>
                     </dl>
@@ -225,7 +226,8 @@ export default function ServicesPage() {
               <p className="mt-2 text-[0.875rem] leading-[1.7] text-slate">
                 Acquisition underwriting, debt sizing and investment committee
                 reporting are frequently commissioned together. We can scope a
-                combined engagement around a single transaction timetable.
+                combined Multifamily engagement around a single transaction
+                timetable.
               </p>
             </div>
             <Link
